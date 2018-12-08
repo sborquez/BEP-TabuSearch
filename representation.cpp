@@ -1,5 +1,6 @@
 #include "representation.hpp"
 
+// Scenario Methods
 Scenario::Scenario (std::string filepath) {
 
     // Parse file    
@@ -90,10 +91,18 @@ void Scenario::print() {
 
 Solution Scenario::get_initial_solution() {
     Solution solution(buses);
-    // TODO
+    // TODO generate an initial solution using some greedy or random algorithm
     return solution;
 }
 
+void Scenario::evaluate(Solution solution) {
+    // TODO calculate score (max trip time) for one solution
+}
+void Scenario::evaluate(std::vector<Solution> solutions) {
+    // TODO calculate score (max trip tome) for all solution in the list
+}
+
+// Solution Methods
 Solution::Solution(int n_buses) {
     score = 0;
     buses = n_buses;
@@ -103,6 +112,18 @@ Solution::Solution(int n_buses) {
         trips_table.push_back(bus_trips);
     }
 }
+
+std::vector<Solution> Solution::get_neighborhood() {
+    // TODO generate a list of solutions using some step function.
+}
+
+// Moviemientos
+// TODO declare all steps functions that it'll use
+void Solution::swap_buses(){}
+void Solution::swap_order(){}
+void Solution::add_trip(){}
+void Solution::del_trip(){}
+
 
 void Solution::print() {
     std::cout << "Score: " << score << "\n";
@@ -115,6 +136,10 @@ void Solution::print() {
         }
         std::cout << "\n";
     }
+}
+
+void Solution::write(const char* log_file) {
+    // TODO write solution to file
 }
 
 int Solution::get_score() {

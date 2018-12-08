@@ -16,6 +16,8 @@ class TabuSearch;
 / TabuList es un Queue de tamano fijo, este almacena las soluciones
 / ya visitadas para no tener que volver a elegirlas. Tiene un 
 / tamano fijo, elimina al item mas viejo para agregar uno nuevo.
+/ Esta posee una lista de struct item, la cual puede almacenar solo
+/ la informacion relevante de una solucion (por ejemplo el movimiento).
 */
 class TabuList;
 
@@ -40,12 +42,17 @@ public:
     // check revisa si una solucion esta en la lista.
     bool check(Solution solution);
 
-    // get_length retorna el tamano maximo de la lista.
+    // get_size retorna el tamano maximo de la lista.
+    int get_size();
+
+    // get_length retorna el tamano actual de la lista.
     int get_length();
 
 private:
     int size;
     std::queue<item> list;
+
+    bool is_full();
 };
 
 

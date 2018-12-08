@@ -104,6 +104,13 @@ private:
     / a los refugios.
     */
     std::vector<std::vector<struct trip>> trips_table;
+
+    // Moviemientos
+    // TODO define all steps functions that it'll use
+    void swap_buses();
+    void swap_order();
+    void add_trip();
+    void del_trip();
 };
 
 #endif // !REPR

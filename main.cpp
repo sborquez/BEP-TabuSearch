@@ -84,18 +84,15 @@ int main( int argc, char* argv[] )
     if (loglvl == 2) {
         std::cout << "\nSolucion inicial\n";
         initial.print();
-        
+
         std::cout << "\nComenzando TabuSearch\n";
     }
 
-    /*
     // Hacemos correr el algoritmo con el escenario y solucion inicial.
     Solution best = solver.run(scenario, initial);
     if (loglvl == 2) {
         std::cout << "\nBest solution\n";
-        initial.print();
+        best.print();
     }
-    */
-
     return 0;
 }
