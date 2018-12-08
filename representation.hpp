@@ -1,7 +1,10 @@
 #ifndef REPR
 #define REPR 
 
+#include <iostream>
 #include <vector>
+#include <fstream>
+
 
 /*
 / Scenario representa a una 'instancia' del problema. Contiene las diferentes
@@ -29,8 +32,8 @@ struct trip {
 class Scenario
 {
 public:
-    Scenario(const char* file_path);
-    ~Scenario();
+    Scenario(std::string filepath);
+    ~Scenario(){};
 
     // evaluate es la 'funcion de evaluacion', esta se aplica a una solucion.
     void evaluate(Solution solution);
@@ -39,9 +42,12 @@ public:
     // get_initial_solution genera una solucion inicial factible para la heuristica.
     Solution get_initial_solution();
 
+    // print muestra los parametros por pantalla.
+    void print();
+
 private:
     // Archivo de la instancia
-    char* file_path;
+    char* filepath;
 
     // Parametros de la instancia
     int buses;
@@ -50,11 +56,12 @@ private:
     int pickups;
 
     int total_demand;
+    int total_capacity;
     int buses_capacity;
     std::vector<int> shelters_capacity;
     std::vector<int> pickups_demand;
 
-    // Lista de estaciones correspondientes al bus (indice)
+    // Lista de buses por estacion
     std::vector<int> bus_yard;
 
     // Distancia entre cada estacion a los puntos de encuetro
@@ -69,11 +76,11 @@ private:
 class Solution
 {
 public:
-    Solution();
-    ~Solution();
+    Solution(int n_buses);
+    ~Solution(){};
 
     int get_score();
-    void set_score(int score);
+    void set_score(int s);
 
     std::vector<Solution> get_neighborhood();
 
@@ -84,12 +91,17 @@ private:
     // Valor obtendio de la funcion de evaluacion.
     int score;
 
+    // Cantidad de buses (filas de la tabla)
+    int buses;
+
     /*
     / Representacion de la solucion, como una tabla de viajes
     / por bus. Cada fila son los viajes realizados por un bus.
     / Se obvia el primer viaje desde la estacion (yard) y los
     / viajes de vuelta desde un refugio (shelter) a un punto
-    / de encuentro (pickup).
+    / de encuentro (pickup). De esta forma solo almacenamos
+    / los viajes de ida desde los puntos de encuentro (pickup)
+    / a los refugios.
     */
     std::vector<std::vector<struct trip>> trips_table;
 };
