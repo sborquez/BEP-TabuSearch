@@ -1,6 +1,10 @@
 #include <iostream>
 #include <unistd.h>
 #include <cstdlib>
+#include <string>
+
+#include "representation.hpp"
+#include "tabusearch.hpp"
 
 void print_usage()
 {
@@ -22,8 +26,8 @@ int main( int argc, char* argv[] )
         print_usage();
         return 1;
     }
-    const char* intput_file = ""; 
-    const char* output_file = "";
+    std::string input_file = ""; 
+    std::string output_file = "";
     int max_iterations = 100;
     int tabu_list_len = 6 ;
     int loglvl = 0;
@@ -34,7 +38,7 @@ int main( int argc, char* argv[] )
         switch(c)
         {
             case 'i':
-                if (optarg) intput_file = optarg;
+                if (optarg) input_file = optarg;
                 break;
             case 'o':
                 if(optarg) output_file = optarg;
@@ -50,14 +54,48 @@ int main( int argc, char* argv[] )
                 break;
         }
     }
+    
     if (loglvl == 2) {
-        std::cout << intput_file << "\n";
-        std::cout << output_file << '\n';
-        std::cout << max_iterations << '\n';
-        std::cout << tabu_list_len << '\n';
-        std::cout << loglvl << '\n';
+        std::cout << "Parametros del programa\n";
+        std::cout << "Input file: " << input_file << "\n";
+        std::cout << "Outpyt file: " << output_file << '\n';
+        std::cout << "Max iterations: " << max_iterations << '\n';
+        std::cout << "Tabu list length: " << tabu_list_len << '\n';
+        std::cout << "logging level: " << loglvl << "\n\n";
+    
+        std::cout << "Cargando Scenario \n";
     }    
 
+    // Cargar el escenario de la instancia
+    Scenario scenario (input_file);
+    if (loglvl == 2) {
+        scenario.print();
+    }
 
+    // Creamos un nuevo Tabu Search con los parametros dados
+    TabuSearch solver (max_iterations, tabu_list_len, loglvl);
+    if (loglvl == 2) {
+        std::cout << "\nTabu Search:\n";
+        solver.print();
+    }
 
+    // Buscamos una solucion inicial para entregarsela a Tabu Search.
+    Solution initial = scenario.get_initial_solution();
+    if (loglvl == 2) {
+        std::cout << "\nSolucion inicial\n";
+        initial.print();
+        
+        std::cout << "\nComenzando TabuSearch\n";
+    }
+
+    /*
+    // Hacemos correr el algoritmo con el escenario y solucion inicial.
+    Solution best = solver.run(scenario, initial);
+    if (loglvl == 2) {
+        std::cout << "\nBest solution\n";
+        initial.print();
+    }
+    */
+
+    return 0;
 }

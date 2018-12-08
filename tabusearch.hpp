@@ -1,6 +1,7 @@
 #ifndef TABUSEARCH
 #define TABUSEARCH
 
+#include <iostream>
 #include <queue>
 
 #include "representation.hpp"
@@ -26,19 +27,43 @@ struct item {
     Solution solution;
 };
 
+class TabuList
+{
+public:
+    TabuList();
+    TabuList(int n);
+    ~TabuList(){};
+
+    // add_item agrega una nueva solucion a la lista.
+    void add_item(Solution solution);
+
+    // check revisa si una solucion esta en la lista.
+    bool check(Solution solution);
+
+    // get_length retorna el tamano maximo de la lista.
+    int get_length();
+
+private:
+    int size;
+    std::queue<item> list;
+};
+
 
 class TabuSearch
 {
 public:
-    TabuSearch(int max_iterations, int tabu_list_size, int loglvl);
-    ~TabuSearch();
+    TabuSearch(int max_i, int tl_size, int lvl);
+    ~TabuSearch(){};
 
-    Solution run(Scenario scenario);
+    Solution run(Scenario scenario, Solution initial);
+
+    // print Muestra en pantalla los parametros del algoritmo.
+    void print();
 
 private:
     int max_iterations;
-    int tabu_list_size
-    ;
+    TabuList tabulist;
+
     // iteracion actual
     int iteration;
 
@@ -47,23 +72,6 @@ private:
 
     // Revisa si ya se alcanzo una solucion optima o el limite de iteraciones
     bool exit_condition();
-};
-
-class TabuList
-{
-public:
-    TabuList(int size);
-    ~TabuList();
-
-    // add a new solution to the list
-    void add_item(Solution solution);
-
-    // check if solution is not in the list
-    bool check(Solution solution);
-
-private:
-    int size;
-    std::queue<item> list;
 };
 
 #endif // !TABUSEARCH
