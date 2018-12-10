@@ -76,9 +76,6 @@ private:
 
     // Debug 
     int loglvl;
-
-    // Revisa si ya se alcanzo una solucion optima o el limite de iteraciones
-    bool exit_condition();
 };
 
 #endif // !TABUSEARCH

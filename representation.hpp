@@ -44,8 +44,8 @@ public:
     ~Scenario(){};
 
     // evaluate es la 'funcion de evaluacion', esta se aplica a una solucion.
-    void evaluate(Solution solution);
-    void evaluate(std::vector<Solution> solutions);
+    void evaluate(Solution &solution);
+    void evaluate(std::vector<Solution> &solutions);
 
     // get_initial_solution genera una solucion inicial factible utilizando la 
     // heuristica elegida, GRASP es la predefinidia
@@ -124,8 +124,8 @@ public:
     std::vector<Solution> get_neighborhood();
 
     void print();
+    void print(bool start_from_one);
     void write(const char* log_file);
-
 
 private:
     // Valor obtendio de la funcion de evaluacion.

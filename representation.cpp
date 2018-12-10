@@ -213,6 +213,7 @@ void Scenario::__GREEDYRANDOM(Solution &solution) {
             solution.set_score(score);
             return;
         }
+
         // Obtener opciones de viajes
         std::vector<struct  trip> bus_options = get_trips(b, solution);
         if (loglvl == 2) {
@@ -293,7 +294,7 @@ void Scenario::__HILLCLIMBING(Solution &solution) {
     //TODO use an initial (greedy) solution and  
 }
 
-void Scenario::evaluate(Solution solution) {
+void Scenario::evaluate(Solution &solution) {
     std::vector<int> total_time(buses, 0);
     for(int bus = 0; bus < buses; ++bus) {
         std::vector<trip> bus_trips = solution.trips_table[bus];
@@ -314,7 +315,7 @@ void Scenario::evaluate(Solution solution) {
     solution.set_score(score);
 
 }
-void Scenario::evaluate(std::vector<Solution> solutions) {
+void Scenario::evaluate(std::vector<Solution> &solutions) {
     for(auto solution: solutions) {
         evaluate(solution);
     }
@@ -346,13 +347,17 @@ void Solution::del_trip(){}
 
 
 void Solution::print() {
+    print(true);
+}
+
+void Solution::print(bool start_from_one) {
     std::cout << "Score: " << score << "\n";
     std::cout << "Buses: " << buses << "\n";
     std::cout << "Trip Table:\n";
     for(int bus = 0; bus < buses; ++bus) {
-        std::cout << "bus_" << bus+1 << ": ";
+        std::cout << "bus_" << bus+start_from_one << ": ";
         for(auto t: trips_table[bus]) {
-            std::cout <<  " ("  << t.pickup + 1 << " , " << t.shelter + 1 << ")";
+            std::cout <<  " ("  << t.pickup + start_from_one << " , " << t.shelter + start_from_one << ")";
         }
         std::cout << "\n";
     }
