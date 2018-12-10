@@ -67,7 +67,7 @@ int main( int argc, char* argv[] )
     }    
 
     // Cargar el escenario de la instancia
-    Scenario scenario (input_file);
+    Scenario scenario (input_file, loglvl);
     if (loglvl == 2) {
         scenario.print();
     }

@@ -3,7 +3,15 @@
 
 #include <iostream>
 #include <vector>
+#include <tuple>
 #include <fstream>
+#include <algorithm>
+#include <functional>
+#include <stdlib.h>  
+
+#define GREEDYMAXITER 100
+#define GREEDYPORTION 0.5
+#define GREEDYRANDOMBUS false
 
 
 /*
@@ -32,20 +40,31 @@ struct trip {
 class Scenario
 {
 public:
-    Scenario(std::string filepath);
+    Scenario(std::string filepath, int loglvl);
     ~Scenario(){};
 
     // evaluate es la 'funcion de evaluacion', esta se aplica a una solucion.
     void evaluate(Solution solution);
     void evaluate(std::vector<Solution> solutions);
 
-    // get_initial_solution genera una solucion inicial factible para la heuristica.
+    // get_initial_solution genera una solucion inicial factible utilizando la 
+    // heuristica elegida, GRASP es la predefinidia
     Solution get_initial_solution();
+    Solution get_initial_solution(std::string  metaheuristic);
+
+    // is_feasible revisa si la solucion dada es factible, cumple las restricciones 
+    bool is_feasible(Solution solution);
+
+    // Retorna las opciones de viajes que tiene el bus en el estado de la solucion
+    std::vector<struct trip> get_trips(int bus, Solution &solution);
 
     // print muestra los parametros por pantalla.
     void print();
 
 private:
+    // debug
+    int loglvl;
+
     // Archivo de la instancia
     char* filepath;
 
@@ -69,6 +88,14 @@ private:
 
     // Distancia de cada punto de encuetro a los refugios
     std::vector<std::vector<int>> dist_pickup_to_shelter;
+
+    // MetaHeuristicas para la solucion inicial
+    // Greedy Randomized Adaptive Search Procedure (GRASP)
+    void __GRASP(Solution &solution);
+    // Greedy Search Procedure
+    void __GREEDYRANDOM(Solution &Solution);
+    // Hill Climbing
+    void __HILLCLIMBING(Solution &solution);
 };
 
 
@@ -76,24 +103,6 @@ private:
 class Solution
 {
 public:
-    Solution(int n_buses);
-    ~Solution(){};
-
-    int get_score();
-    void set_score(int s);
-
-    std::vector<Solution> get_neighborhood();
-
-    void print();
-    void write(const char* log_file);
-
-private:
-    // Valor obtendio de la funcion de evaluacion.
-    int score;
-
-    // Cantidad de buses (filas de la tabla)
-    int buses;
-
     /*
     / Representacion de la solucion, como una tabla de viajes
     / por bus. Cada fila son los viajes realizados por un bus.
@@ -104,6 +113,26 @@ private:
     / a los refugios.
     */
     std::vector<std::vector<struct trip>> trips_table;
+
+    Solution(int n_buses);
+    ~Solution(){};
+
+    int get_score();
+    void set_score(int s);
+
+    // TODO recibir una funcion como argumento que se el movimiento
+    std::vector<Solution> get_neighborhood();
+
+    void print();
+    void write(const char* log_file);
+
+
+private:
+    // Valor obtendio de la funcion de evaluacion.
+    int score;
+
+    // Cantidad de buses (filas de la tabla)
+    int buses;
 
     // Moviemientos
     // TODO define all steps functions that it'll use
