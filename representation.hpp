@@ -13,6 +13,7 @@
 #define GREEDYPORTION 0.5
 #define GREEDYRANDOMBUS false
 
+#define START_FROM_1 false
 
 /*
 / Scenario representa a una 'instancia' del problema. Contiene las diferentes
@@ -124,7 +125,6 @@ public:
     std::vector<Solution> get_neighborhood();
 
     void print();
-    void print(bool start_from_one);
     void write(const char* log_file);
 
 private:

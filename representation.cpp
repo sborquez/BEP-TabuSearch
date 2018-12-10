@@ -161,13 +161,13 @@ Solution Scenario::get_initial_solution() {
 
 Solution Scenario::get_initial_solution(std::string metaheuristic) {
     Solution initial(buses);
-    if (loglvl == 2) {std::cout << "START " << metaheuristic << "\n";}
+    if (loglvl == 2) {std::cout << "COMIENZO DE " << metaheuristic << "\n";}
     if (metaheuristic.compare("GRASP") == 0) {
         __GRASP(initial);
     } else if (metaheuristic.compare("GREEDYRANDOM") == 0) {
         __GREEDYRANDOM(initial);
     }
-    if (loglvl == 2) {std::cout << "END " << metaheuristic << "\n";}
+    if (loglvl == 2) {std::cout << "FIN DE " << metaheuristic << "\n";}
     return initial;
 }
 
@@ -182,7 +182,7 @@ void Scenario::__GREEDYRANDOM(Solution &solution) {
     std::vector<int> total_time(buses, 0);
     for(int bus = 0; bus < buses; ++bus) {
         std::vector<trip> bus_trips = solution.trips_table[bus];
-        for(int t = 0; t < bus_trips.size(); ++t) {
+        for(unsigned int t = 0; t < bus_trips.size(); ++t) {
             // Si es el primer viaje, se debe agregar el costo de 
             // la estacion al P.E
             if (t == 0) {
@@ -217,11 +217,7 @@ void Scenario::__GREEDYRANDOM(Solution &solution) {
         // Obtener opciones de viajes
         std::vector<struct  trip> bus_options = get_trips(b, solution);
         if (loglvl == 2) {
-            std::cout << "["<< iterations <<" bus_" << b << "]:";
-            for(auto t: bus_options) {
-                std::cout << " [" << t.pickup << "->" << t.shelter << "]";
-            }
-            std::cout << "\n";
+            std::cout << "[Iteracion "<< iterations <<"]\nOpciones bus_" << b << ":\n\t";
         }
         // Evaluar cada viaje en t
         std::vector<trip> bus_trips = solution.trips_table[b];
@@ -250,9 +246,8 @@ void Scenario::__GREEDYRANDOM(Solution &solution) {
             }
         );
         if (loglvl == 2) {
-            std::cout << "evaluations:";
             for(auto e: evaluation_option) {
-                std::cout << " [" << std::get<1>(e).pickup << "->"<< std::get<1>(e).shelter  << "]:" << std::get<0>(e);
+                std::cout << std::get<0>(e) << ":(" << std::get<1>(e).pickup << " , "<< std::get<1>(e).shelter  << ") ";
             }
             std::cout << "\n";
         }
@@ -273,17 +268,18 @@ void Scenario::__GREEDYRANDOM(Solution &solution) {
             total_time[b] += std::get<0>(picked_option);
             solution.trips_table[b].push_back(std::get<1>(picked_option));
             if (loglvl == 2) {
-                std::cout << "Picked option: [" << std::get<1>(picked_option).pickup << "->";
-                std::cout << std::get<1>(picked_option).shelter << "]:" << std::get<0>(picked_option);
+                std::cout << "Opcion elegida: "<< std::get<0>(picked_option);
+                std::cout << std::get<1>(picked_option).pickup << " , ";
+                std::cout << std::get<1>(picked_option).shelter << ")" ;
             }
         }
 
         if (loglvl == 2) {
-            std::cout << "\ntotal times:";
+            std::cout << "\nTiempos de cada bus: (";
             for(auto time: total_time) {
-                std::cout << " " << time;
+                std::cout << time << " ";
             }
-            std::cout << "\n";
+            std::cout << ")\n\n";
         }
     }
     int score = *std::max_element(total_time.begin(), total_time.end());
@@ -298,7 +294,7 @@ void Scenario::evaluate(Solution &solution) {
     std::vector<int> total_time(buses, 0);
     for(int bus = 0; bus < buses; ++bus) {
         std::vector<trip> bus_trips = solution.trips_table[bus];
-        for(int t = 0; t < bus_trips.size(); ++t) {
+        for(unsigned int t = 0; t < bus_trips.size(); ++t) {
             // Si es el primer viaje, se debe agregar el costo de 
             // la estacion al P.E
             if (t == 0) {
@@ -345,19 +341,14 @@ void Solution::swap_order(){}
 void Solution::add_trip(){}
 void Solution::del_trip(){}
 
-
 void Solution::print() {
-    print(true);
-}
-
-void Solution::print(bool start_from_one) {
-    std::cout << "Score: " << score << "\n";
+    std::cout << "Tiempo Maximo: " << score << "\n";
     std::cout << "Buses: " << buses << "\n";
-    std::cout << "Trip Table:\n";
+    std::cout << "Tabla de viajes:\n";
     for(int bus = 0; bus < buses; ++bus) {
-        std::cout << "bus_" << bus+start_from_one << ": ";
+        std::cout << "\tbus_" << bus + START_FROM_1 << ": ";
         for(auto t: trips_table[bus]) {
-            std::cout <<  " ("  << t.pickup + start_from_one << " , " << t.shelter + start_from_one << ")";
+            std::cout <<  " ("  << t.pickup + START_FROM_1 << " , " << t.shelter + START_FROM_1 << ")";
         }
         std::cout << "\n";
     }

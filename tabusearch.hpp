@@ -33,7 +33,7 @@ class TabuList
 {
 public:
     TabuList();
-    TabuList(int n);
+    TabuList(unsigned int n);
     ~TabuList(){};
 
     // add_item agrega una nueva solucion a la lista.
@@ -49,7 +49,7 @@ public:
     int get_length();
 
 private:
-    int size;
+    unsigned int size;
     std::queue<item> list;
 
     bool is_full();

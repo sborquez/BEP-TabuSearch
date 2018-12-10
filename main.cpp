@@ -77,13 +77,14 @@ int main( int argc, char* argv[] )
     if (loglvl == 2) {
         std::cout << "\nTabu Search:\n";
         solver.print();
+        std::cout << "\nBuscando solucion inicial\n";
     }
 
     // Buscamos una solucion inicial para entregarsela a Tabu Search.
     Solution initial = scenario.get_initial_solution();
     if (loglvl == 2) {
         std::cout << "\nSolucion inicial\n";
-        initial.print(false);
+        initial.print();
 
         std::cout << "\nComenzando TabuSearch\n";
     }
@@ -92,7 +93,7 @@ int main( int argc, char* argv[] )
     Solution best = solver.run(scenario, initial);
     if (loglvl == 2) {
         std::cout << "\nMejor solucion\n";
-        best.print(false);
+        best.print();
     }
     return 0;
 }

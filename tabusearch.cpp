@@ -15,7 +15,7 @@ Solution TabuSearch::run(Scenario scenario, Solution initial) {
     while(true) {
         // Exit condition 1: cantidad de iteraciones maxima alcanzada
         if (iteration > max_iterations) {
-            if(loglvl == 2) std::cout << "\nCONDICION DE SALIDA 2\n";
+            if(loglvl == 2) std::cout << "\nCONDICION DE SALIDA 1: Maxima cantidad de iteraciones alcanzada.\n";
             break;
         }
         if(loglvl == 2) std::cout << "[iteration " << iteration << "] ";
@@ -33,7 +33,7 @@ Solution TabuSearch::run(Scenario scenario, Solution initial) {
         if(loglvl == 2) std::cout << "filtered: " << end - neighborhood.begin() << " ";
         // Exit condition 2: no quedan mas opciones
         if (end - neighborhood.begin() == 0) {
-            if(loglvl == 2) std::cout << "\nCONDICION DE SALIDA 2\n";
+            if(loglvl == 2) std::cout << "\nCONDICION DE SALIDA 2: No hay movimientos disponibles.\n";
             break;      
         }   
 
@@ -72,7 +72,7 @@ TabuList::TabuList() {
     size = 0;
 }
 
-TabuList::TabuList(int n) {
+TabuList::TabuList(unsigned int n) {
     size = n;
 }
 
