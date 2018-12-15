@@ -2,7 +2,7 @@
 #define TABUSEARCH
 
 #include <iostream>
-#include <queue>
+#include <deque>
 
 #include "representation.hpp"
 
@@ -50,7 +50,7 @@ public:
 
 private:
     unsigned int size;
-    std::queue<item> list;
+    std::deque<item> list;
 
     bool is_full();
 };
@@ -62,10 +62,17 @@ public:
     TabuSearch(int max_i, int tl_size, int lvl);
     ~TabuSearch(){};
 
+    // run busca la mejor solucion dado un escenario y una solucion factible
     Solution run(Scenario scenario, Solution initial);
 
     // print Muestra en pantalla los parametros del algoritmo.
     void print();
+
+    // get_iterations retorna la cantidad de iteraciones.
+    int get_iterations();
+
+    // get_tabulist_size retorna el largo de la lista tabu
+    int get_tabulist_size();
 
 private:
     int max_iterations;

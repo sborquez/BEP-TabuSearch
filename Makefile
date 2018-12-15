@@ -1,14 +1,5 @@
 all: bep
-	./bep -i instances/InstanceBEP-1-4-2-4.txt -o asdasd/asdasd -n 2 -l 15 -v 2
-
-test1: bep
-	./bep -i instances/InstanceBEP-1-4-2-4.txt -o asdasd/asdasd -n 2 -l 15 -v 2
-
-test2: bep
-	./bep -i instances/InstanceBEP-2-12-3-6.txt -o asdasd/asdasd -n 2 -l 15 -v 2
-
-test3: bep
-	./bep -i instances/InstanceBEP-3-11-10-7.txt -o asdasd/asdasd -n 2 -l 15 -v 2
+	./bep
 
 bep: main.o tabusearch.o representation.o
 	g++ -std=c++11 -Wall -o bep main.o tabusearch.o representation.o
@@ -24,3 +15,6 @@ representation.o: representation.cpp representation.hpp
 
 clean:
 	rm -f *.o bep
+
+purge:
+	rm -f *.log *.output

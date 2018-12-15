@@ -7,12 +7,17 @@
 #include <fstream>
 #include <algorithm>
 #include <functional>
-#include <stdlib.h>  
+#include <stdlib.h>
+#include <fstream>
+#include <string.h> 
 
-#define GREEDYMAXITER 100
+#define INITIAL_MAXITER 1000
 #define GREEDYPORTION 0.5
-#define GREEDYRANDOMBUS false
-
+#define METAHEURISTIC "PROGRESRANK"
+//#define METAHEURISTIC "RANDOMGREEDY"
+//#define METAHEURISTIC "PROGRES"
+#define USEPROGRES true
+#define RANDOM_BUS false
 #define START_FROM_1 false
 
 /*
@@ -49,19 +54,16 @@ public:
     void evaluate(std::vector<Solution> &solutions);
 
     // get_initial_solution genera una solucion inicial factible utilizando la 
-    // heuristica elegida, GRASP es la predefinidia
+    // heuristica de Random Greedy Choice
     Solution get_initial_solution();
-    Solution get_initial_solution(std::string  metaheuristic);
 
     // is_feasible revisa si la solucion dada es factible, cumple las restricciones 
     bool is_feasible(Solution solution);
 
-    // Retorna las opciones de viajes que tiene el bus en el estado de la solucion
-    std::vector<struct trip> get_trips(int bus, Solution &solution);
-
     // print muestra los parametros por pantalla.
     void print();
-
+    // write solution
+    void write(std::ofstream &file, Solution &ssolution);
 private:
     // debug
     int loglvl;
@@ -90,13 +92,16 @@ private:
     // Distancia de cada punto de encuetro a los refugios
     std::vector<std::vector<int>> dist_pickup_to_shelter;
 
-    // MetaHeuristicas para la solucion inicial
-    // Greedy Randomized Adaptive Search Procedure (GRASP)
-    void __GRASP(Solution &solution);
-    // Greedy Search Procedure
-    void __GREEDYRANDOM(Solution &Solution);
-    // Hill Climbing
-    void __HILLCLIMBING(Solution &solution);
+    // Retorna las opciones de viajes que tiene el bus en el estado de la solucion.
+    std::vector<struct trip> get_trips(int bus, Solution &solution);
+    
+    // Retorna el tiempo de cada bus en el estado de la solucion.
+    std::vector<int> calculate_buses_time(Solution &solution);
+
+    // MetaHeuristica para la solucion inicial
+    void __PROGRES(Solution &Solution);
+    void __PROGRESRANK(Solution &solution);
+    void __GREEDYRANDOM(Solution &solution);
 };
 
 
@@ -116,30 +121,36 @@ public:
     std::vector<std::vector<struct trip>> trips_table;
 
     Solution(int n_buses);
+    Solution(const Solution &solution);
     ~Solution(){};
 
+    int get_buses();
+    std::vector<int> get_buses_times();
     int get_score();
-    void set_score(int s);
+    void set_score(int s, std::vector<int> buses_times);
 
-    // TODO recibir una funcion como argumento que se el movimiento
     std::vector<Solution> get_neighborhood();
 
     void print();
-    void write(const char* log_file);
+    
+    bool equals(const Solution& solution);
 
 private:
     // Valor obtendio de la funcion de evaluacion.
     int score;
+    std::vector<int> buses_times;
 
     // Cantidad de buses (filas de la tabla)
     int buses;
+    std::vector<int> bus_yard;
 
     // Moviemientos
-    // TODO define all steps functions that it'll use
-    void swap_buses();
+    Solution swap_trip(int bus, int trip1, int trip2);
+    /*
     void swap_order();
     void add_trip();
     void del_trip();
+    */
 };
 
 #endif // !REPR
